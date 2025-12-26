@@ -179,7 +179,9 @@ The RAG integration and functionality carries a weight of 40%.
 - Evidence Snippet shown in UI
 
 📸 **Screenshot**
-![Successful Retrieval](screenshots/successful_retrieval.png)
+![Successful Retrieval](screenshots/successful_retrieval.PNG)
+
+### 🔴 Example 2: Missing Information (Hallucination Prevention)
 
 
 **User Input**
@@ -195,7 +197,7 @@ I cannot find this information in the provided documents.
 - Reason: No relevant document context found
 
 📸 **Screenshot**
-![Hallucination Prevention](screenshots/no_data_found.png)
+![Hallucination Prevention](screenshots/no_data_found.PNG)
 
 ---
 
