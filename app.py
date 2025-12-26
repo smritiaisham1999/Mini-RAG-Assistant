@@ -1,10 +1,9 @@
 import streamlit as st
 import uuid
 import os
-import shutil  # File operations ke liye (jo pehle main.py me tha)
+import shutil 
 
-# --- LOCAL MODULE IMPORTS (Direct Backend Logic) ---
-# Hum ab requests use nahi karenge, balkay direct functions call karenge
+
 from rag_engine import RAGManager
 from database import init_db, add_message, get_chat_history
 
@@ -17,11 +16,11 @@ st.set_page_config(
 )
 
 # --- SYSTEM INITIALIZATION (Backend Setup inside Frontend) ---
-# Ye logic pehle main.py ke startup me thi, ab yahan session state me hogi
+
 if "rag_manager" not in st.session_state:
     st.session_state.rag_manager = RAGManager()
     
-    # Database aur Data folder initialize karein
+
     init_db()
     os.makedirs("data", exist_ok=True)
 
@@ -108,10 +107,10 @@ with st.sidebar:
                     saved_paths = []
                     
                     for uploaded_file in uploaded_files:
-                        # File path define karein
+                        
                         file_location = f"data/{uploaded_file.name}"
                         
-                        # File write karein
+                        
                         with open(file_location, "wb") as buffer:
                             buffer.write(uploaded_file.getbuffer())
                         
