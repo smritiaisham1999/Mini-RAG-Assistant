@@ -1,192 +1,156 @@
-🧠 Intelligent RAG Assistant
+# 🧠 Intelligent RAG Assistant
+> Grounded • Explainable • Anti-Hallucination AI
 
-Grounded • Explainable • Anti-Hallucination AI
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.31-red)
+![LangChain](https://img.shields.io/badge/LangChain-0.1-orange)
+![FAISS](https://img.shields.io/badge/VectorDB-FAISS-green)
+![Status](https://img.shields.io/badge/Status-Prototype-yellow)
 
+**Version:** 1.0  
+**Type:** Standalone AI Application  
 
+---
 
+## 📌 Project Overview
 
-Version: 1.0
-Type: Standalone AI Application
+**Intelligent RAG Assistant** is a **Retrieval-Augmented Generation (RAG)** system that delivers **accurate, source-grounded, and confidence-aware answers** from user-uploaded documents.
 
-📌 Project Overview
+Unlike standard chatbots, this system:
+- ❌ Prevents hallucinations
+- 📊 Shows confidence scores
+- 📄 Cites document sources
+- 🔍 Answers strictly from uploaded files
 
-Intelligent RAG Assistant is a Retrieval-Augmented Generation (RAG) system designed to deliver accurate, source-grounded, and confidence-aware answers from user-provided documents.
+---
 
-Unlike generic chatbots, this assistant:
+## 🏗️ System Architecture
 
-❌ Prevents hallucinations
+The application follows a **Unified Monolithic Microservice Architecture**, optimized for performance and simplicity.
 
-📊 Displays confidence scores
+### 🔹 Core Components
 
-📄 Cites document evidence
+| Layer | Technology | Responsibility |
+|------|-----------|---------------|
+| UI | Streamlit | Chat UI, file upload, session state |
+| Logic | LangChain | Chunking, retrieval, orchestration |
+| Vector DB | FAISS | Semantic similarity search |
+| Storage | SQLite | Chat history persistence |
+| LLM | OpenAI / Gemini | Context-based generation |
 
-🔍 Answers only from uploaded files
+---
 
-🏗️ System Architecture
+## 🔄 Retrieval & Generation Pipeline
 
-The application follows a Unified Monolithic Microservice Architecture, optimized for simplicity, performance, and rapid deployment.
+The system follows a strict **Load → Embed → Retrieve → Generate** workflow.
 
-🔹 Core Components
-Layer	Technology	Responsibility
-UI Layer	Streamlit	Chat UI, file uploads, session handling
-Orchestration	LangChain	Document parsing, chunking, retrieval logic
-Vector Store	FAISS	Semantic similarity search
-Persistence	SQLite	Chat history & session memory
-LLM	OpenAI / Gemini	Context-grounded response generation
+### 1️⃣ Ingestion
+- Supports **PDF** and **DOCX**
+- Text extracted and cleaned
 
-📌 Key Design Choice:
-UI and backend logic are tightly coupled to reduce latency and complexity.
+### 2️⃣ Chunking
+- Chunk Size: **1000 characters**
+- Overlap: **200 characters**
+- Uses `RecursiveCharacterTextSplitter`
 
-🔄 Retrieval & Generation Pipeline
+### 3️⃣ Vectorization
+- Embedding Size: **1536**
+- Stored locally in **FAISS**
 
-The system strictly follows a Load → Embed → Retrieve → Generate workflow.
+### 4️⃣ Retrieval
+- Top **3** semantically closest chunks
+- Based on cosine/L2 similarity
 
-1️⃣ Ingestion
+### 5️⃣ Generation
+- LLM answers **only from retrieved context**
+- External knowledge strictly blocked
 
-Supports PDF and DOCX
+---
 
-Text extracted and cleaned (formatting removed)
+## 🛡️ Confidence Scoring (Anti-Hallucination)
 
-2️⃣ Chunking
+Each response includes a **Confidence Score** based on FAISS L2 distance.
 
-Chunk Size: 1000 characters
-
-Overlap: 200 characters
-
-Method: RecursiveCharacterTextSplitter
-
-Ensures semantic continuity
-
-3️⃣ Vectorization
-
-Embedding Size: 1536 dimensions
-
-Model: OpenAI / Gemini Embeddings
-
-Stored locally in FAISS
-
-4️⃣ Retrieval
-
-Top 3 most relevant chunks
-
-Based on semantic similarity
-
-5️⃣ Generation
-
-LLM answers only from retrieved context
-
-Strict prompt prevents external knowledge usage
-
-🛡️ Confidence Scoring (Anti-Hallucination)
-
-Every response includes a Confidence Score, computed using FAISS L2 Euclidean Distance.
-
-📐 Formula
+### 📐 Formula
 Score = 1 / (1 + (Distance × 0.3)) × 100
 
-🧠 Interpretation
 
-100% → Exact semantic match
+### 🔎 Rules
+- **100%** → Exact match
+- **< 30%** → Answer is rejected
 
-Lower score → Weaker relevance
+---
 
-< 30% → Answer is blocked
+## 🧪 Example Scenarios
 
-🚫 If confidence drops below threshold, the system refuses to answer.
+### ✅ Scenario A: Successful Retrieval
 
-🧪 Example Scenarios
-✅ Scenario A: Successful Retrieval
-
-User Query
-
+**User Query**
 What is the specific weightage for RAG integration?
 
 
-AI Response
 
+**System Answer**
 The RAG integration and functionality carries a weight of 40%.
 
 
-Metadata
 
-🟢 Confidence Score: 98.5%
+**Metadata**
+- 🟢 Confidence Score: **98.5%**
+- 📄 Source: `Mini RAG Assistant (1).docx`
+- 🔍 Evidence snippet included
 
-📄 Source File: Mini RAG Assistant (1).docx
+---
 
-🔎 Evidence:
+### ❌ Scenario B: Hallucination Prevention
 
-"...Effectiveness of connecting retrieval... 40%..."
-
-❌ Scenario B: Hallucination Prevention
-
-User Query
-
+**User Query**
 What is the CEO's salary?
 
 
-AI Response
-
+**System Answer**
 I cannot find this information in the provided documents.
 
 
-Metadata
 
-🔴 Confidence Score: 0%
+**Metadata**
+- 🔴 Confidence Score: **0%**
+- ⚠️ No semantic match found
 
-⚠️ Reason: No semantic match found in vector database
+---
 
-⚙️ Installation & Setup
-🔧 Prerequisites
+## ⚙️ Installation & Setup
 
-Python 3.10+
+### 🔧 Prerequisites
+- Python **3.10+**
+- OpenAI / Gemini API Key
 
-OpenAI / Gemini API Key
-
-📥 Installation
+### 📥 Installation
+```bash
 git clone https://github.com/smritiaisham1999/Mini-RAG-Assistant.git
 cd Mini-RAG-Assistant
 pip install -r requirements.txt
+▶️ Run Application
 
-▶️ Run the App
 streamlit run app.py
-
 🎯 Key Features
-
 ✅ Retrieval-Augmented Generation (RAG)
 
-🧠 Context-aware answers
+🛡️ Anti-hallucination guardrails
 
 📊 Confidence scoring
 
-🛡️ Anti-hallucination safeguards
+📄 Source-grounded answers
 
-📄 Source-verified responses
+💬 Persistent chat memory
 
-💬 Chat history persistence
-
-⚡ Lightweight & local vector store
+⚡ Lightweight local vector DB
 
 🚀 Use Cases
+Enterprise Knowledge Bases
 
-Internal Knowledge Bases
+Research & Documentation QA
 
-Research Document QA
+Compliance Verification
 
-Compliance & Policy Verification
-
-Academic & Technical Review
-
-Secure Enterprise AI Assistants
-
-📌 Project Status
-
-🧪 Prototype (Stable)
-Ready for:
-
-Demo presentations
-
-Client showcases
-
-Fiverr / freelance delivery
-
-Further production hardening
+Secure Internal Assistants
