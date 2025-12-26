@@ -1,167 +1,192 @@
-# 🧠 Intelligent RAG Assistant (Prototype)
+🧠 Intelligent RAG Assistant
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11-blue" />
-  <img src="https://img.shields.io/badge/Streamlit-1.31-red" />
-  <img src="https://img.shields.io/badge/LangChain-0.1-orange" />
-  <img src="https://img.shields.io/badge/FAISS-CPU-yellow" />
-</p>
+Grounded • Explainable • Anti-Hallucination AI
 
-<p align="center">
-A secure, production-grade Retrieval-Augmented Generation (RAG) system with strict grounding, confidence scoring, and role-based access control.
-</p>
 
----
 
-## 📋 Executive Summary
 
-The **Intelligent RAG Assistant** is a **secure, production-ready AI application** designed to ingest corporate documents and generate **grounded, citation-backed answers** with zero hallucination.
+Version: 1.0
+Type: Standalone AI Application
 
-This system runs as a **single unified Streamlit application** and enforces:
+📌 Project Overview
 
-- 🚫 **Strict Anti-Hallucination Rules**
-- 🔐 **Role-Based Access Control (RBAC)**
-- 📚 **Transparent Source Citations**
+Intelligent RAG Assistant is a Retrieval-Augmented Generation (RAG) system designed to deliver accurate, source-grounded, and confidence-aware answers from user-provided documents.
 
-It demonstrates a **pro-code RAG architecture** using **local FAISS vector stores**, tightly integrated with a reactive UI for simplicity, speed, and reliability.
+Unlike generic chatbots, this assistant:
 
----
+❌ Prevents hallucinations
 
-## 🚀 Key Features
+📊 Displays confidence scores
 
-### 🛡️ 1. Anti-Hallucination & Grounding
-- **Confidence Scoring:** Uses **L2 Euclidean Distance** from FAISS to compute an answer confidence score (0–100%).
-- **Negative Constraint Enforcement:**  
-  If confidence falls below a threshold (e.g. `< 30%`), the system responds:
-  > *"I cannot find the answer."*
-- **Citation Transparency:** Every answer includes a **Verified Sources** section with exact document names and text snippets.
+📄 Cites document evidence
 
----
+🔍 Answers only from uploaded files
 
-### 🔐 2. Role-Based Access Control (RBAC)
-- **Metadata Tagging:** Documents are tagged with:
-  - `owner_id`
-  - `privacy_mode`
-- **Secure Filtering:**  
-  Users **cannot retrieve private documents** belonging to other users, ensuring full data isolation.
+🏗️ System Architecture
 
----
+The application follows a Unified Monolithic Microservice Architecture, optimized for simplicity, performance, and rapid deployment.
 
-### 🧠 3. Advanced Retrieval Logic
-- **Multi-Query Expansion:**  
-  Automatically expands queries using synonyms  
-  *(e.g., “Cost” → “Price”, “Charges”, “Fee”)*.
-- **Hybrid Chunking Strategy:**  
-  Uses `RecursiveCharacterTextSplitter`  
-  - Chunk Size: `1000`
-  - Overlap: `200`
+🔹 Core Components
+Layer	Technology	Responsibility
+UI Layer	Streamlit	Chat UI, file uploads, session handling
+Orchestration	LangChain	Document parsing, chunking, retrieval logic
+Vector Store	FAISS	Semantic similarity search
+Persistence	SQLite	Chat history & session memory
+LLM	OpenAI / Gemini	Context-grounded response generation
 
-This ensures contextual continuity across long documents.
+📌 Key Design Choice:
+UI and backend logic are tightly coupled to reduce latency and complexity.
 
----
+🔄 Retrieval & Generation Pipeline
 
-## ⚙️ Installation & Setup
+The system strictly follows a Load → Embed → Retrieve → Generate workflow.
 
-### ✅ Prerequisites
-- Python **3.10+**
-- OpenAI **or** Google Gemini API Key
+1️⃣ Ingestion
 
----
+Supports PDF and DOCX
 
-### 📥 1. Clone & Install Dependencies
+Text extracted and cleaned (formatting removed)
 
-```bash
+2️⃣ Chunking
+
+Chunk Size: 1000 characters
+
+Overlap: 200 characters
+
+Method: RecursiveCharacterTextSplitter
+
+Ensures semantic continuity
+
+3️⃣ Vectorization
+
+Embedding Size: 1536 dimensions
+
+Model: OpenAI / Gemini Embeddings
+
+Stored locally in FAISS
+
+4️⃣ Retrieval
+
+Top 3 most relevant chunks
+
+Based on semantic similarity
+
+5️⃣ Generation
+
+LLM answers only from retrieved context
+
+Strict prompt prevents external knowledge usage
+
+🛡️ Confidence Scoring (Anti-Hallucination)
+
+Every response includes a Confidence Score, computed using FAISS L2 Euclidean Distance.
+
+📐 Formula
+Score = 1 / (1 + (Distance × 0.3)) × 100
+
+🧠 Interpretation
+
+100% → Exact semantic match
+
+Lower score → Weaker relevance
+
+< 30% → Answer is blocked
+
+🚫 If confidence drops below threshold, the system refuses to answer.
+
+🧪 Example Scenarios
+✅ Scenario A: Successful Retrieval
+
+User Query
+
+What is the specific weightage for RAG integration?
+
+
+AI Response
+
+The RAG integration and functionality carries a weight of 40%.
+
+
+Metadata
+
+🟢 Confidence Score: 98.5%
+
+📄 Source File: Mini RAG Assistant (1).docx
+
+🔎 Evidence:
+
+"...Effectiveness of connecting retrieval... 40%..."
+
+❌ Scenario B: Hallucination Prevention
+
+User Query
+
+What is the CEO's salary?
+
+
+AI Response
+
+I cannot find this information in the provided documents.
+
+
+Metadata
+
+🔴 Confidence Score: 0%
+
+⚠️ Reason: No semantic match found in vector database
+
+⚙️ Installation & Setup
+🔧 Prerequisites
+
+Python 3.10+
+
+OpenAI / Gemini API Key
+
+📥 Installation
 git clone https://github.com/smritiaisham1999/Mini-RAG-Assistant.git
 cd Mini-RAG-Assistant
 pip install -r requirements.txt
-🔑 2. Environment Variables
-You can either:
 
-Enter API keys directly from the Streamlit sidebar, or
-
-Create a .env file in the project root:
-
-env
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
-GOOGLE_API_KEY=AIzaxxxxxxxxxxxx
-🏃‍♂️ 3. Run the Application
-
+▶️ Run the App
 streamlit run app.py
-The app will be available at:
 
-https://mini-rag-assistant.streamlit.app
-📂 Supported Data Sources
-The system uses LangChain document loaders to support:
+🎯 Key Features
 
-📄 PDF (.pdf) – via PyPDFLoader
+✅ Retrieval-Augmented Generation (RAG)
 
-📝 Word (.docx) – via Docx2txtLoader
+🧠 Context-aware answers
 
-📃 Text (.txt) – via TextLoader
+📊 Confidence scoring
 
-📦 Key Dependencies
-Streamlit – UI & application logic
+🛡️ Anti-hallucination safeguards
 
-LangChain – RAG orchestration
+📄 Source-verified responses
 
-FAISS-CPU – Local vector database
+💬 Chat history persistence
 
-SQLite – Chat history persistence
+⚡ Lightweight & local vector store
 
-📁 Project Structure
+🚀 Use Cases
 
-├── app.py               # Main Streamlit App (UI + Logic)
-├── rag_engine.py        # Core RAG Logic (Chunking, Retrieval, Scoring)
-├── database.py          # SQLite Chat History Manager
-├── main.py              # (Legacy / Optional) API wrappers
-├── requirements.txt     # Python dependencies
-├── faiss_db_store/      # Auto-generated FAISS vector database
-└── README.md            # Project documentation
-📊 Example Output
-1️⃣ User Interface Response
-User Question
+Internal Knowledge Bases
 
-What is the weight of RAG integration?
-Assistant Response
+Research Document QA
 
-The RAG integration and functionality carries a weight of 40%.
-Metrics
+Compliance & Policy Verification
 
-Confidence: 🟢 98.5% (High)
+Academic & Technical Review
 
-Verified Sources:
+Secure Enterprise AI Assistants
 
-Mini RAG Assistant (1).docx
+📌 Project Status
 
-"RAG Integration and Functionality... 40%"
+🧪 Prototype (Stable)
+Ready for:
 
-2️⃣ Terminal Logs
+Demo presentations
 
-INFO: Started Streamlit App
-✅ Database loaded successfully
-📂 Ingestion: Processing 'Mini RAG Assistant (1).docx'
-✅ Processed: 1 file
-🔍 Search Query: 'weight of rag integration'
-✅ Retrieval: Found 3 relevant chunks
-📊 Confidence Score: 98.5%
-🔮 Future Improvements
-🧾 OCR support for scanned PDFs
+Client showcases
 
-🔍 Hybrid Search (BM25 + Semantic Search)
+Fiverr / freelance delivery
 
-🔐 User Authentication (Login / Signup)
-
-🌐 Multi-tenant deployment support
-
-⭐ Why This Project?
-This project showcases enterprise-grade RAG best practices, including:
-
-Zero hallucination guarantees
-
-Explainable AI with confidence scoring
-
-Secure document isolation
-
-Clean, production-ready architecture
-
-Perfect for AI portfolios, enterprise demos, and client-facing RAG solutions.
+Further production hardening
