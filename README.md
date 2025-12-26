@@ -126,7 +126,6 @@ I cannot find this information in the provided documents.
 - OpenAI / Gemini API Key
 
 ### 📥 Installation
-```bash
 git clone https://github.com/smritiaisham1999/Mini-RAG-Assistant.git
 cd Mini-RAG-Assistant
 pip install -r requirements.txt
@@ -154,3 +153,55 @@ Research & Documentation QA
 Compliance Verification
 
 Secure Internal Assistants
+
+
+## 📸 Screenshots & Input/Output Samples
+
+Below are real application screenshots demonstrating how the system processes user input and generates grounded responses.
+
+> 📌 These examples validate the Retrieval, Confidence Scoring, and Anti-Hallucination behavior.
+
+---
+
+### 🟢 Example 1: Successful Retrieval (High Confidence)
+
+**User Input**
+What is the specific weightage for RAG integration?
+**System Output**
+
+The RAG integration and functionality carries a weight of 40%.
+
+
+
+**Displayed Metadata**
+- Confidence Score: **98.5%**
+- Source Document: `Mini RAG Assistant (1).docx`
+- Evidence Snippet shown in UI
+
+📸 **Screenshot**
+![Successful Retrieval](screenshots/successful_retrieval.png)
+
+
+**User Input**
+What is the CEO's salary?
+
+
+
+**System Output**
+I cannot find this information in the provided documents.
+
+**Displayed Metadata**
+- Confidence Score: **0%**
+- Reason: No relevant document context found
+
+📸 **Screenshot**
+![Hallucination Prevention](screenshots/no_data_found.png)
+
+---
+
+### 🧠 What These Examples Prove
+- The system answers **only from retrieved documents**
+- Confidence score reflects semantic relevance
+- Hallucinations are strictly blocked
+- Source verification is visible to the user
+
