@@ -70,7 +70,7 @@ This ensures contextual continuity across long documents.
 
 ### 📥 1. Clone & Install Dependencies
 
-bash
+```bash
 git clone https://github.com/smritiaisham1999/Mini-RAG-Assistant.git
 cd Mini-RAG-Assistant
 pip install -r requirements.txt
@@ -82,14 +82,14 @@ Enter API keys directly from the Streamlit sidebar, or
 Create a .env file in the project root:
 
 env
-Copy code
 OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
 GOOGLE_API_KEY=AIzaxxxxxxxxxxxx
 🏃‍♂️ 3. Run the Application
+
 streamlit run app.py
 The app will be available at:
-https://mini-rag-assistant.streamlit.app/
 
+https://mini-rag-assistant.streamlit.app
 📂 Supported Data Sources
 The system uses LangChain document loaders to support:
 
@@ -109,8 +109,7 @@ FAISS-CPU – Local vector database
 SQLite – Chat history persistence
 
 📁 Project Structure
-plaintext
-Copy code
+
 ├── app.py               # Main Streamlit App (UI + Logic)
 ├── rag_engine.py        # Core RAG Logic (Chunking, Retrieval, Scoring)
 ├── database.py          # SQLite Chat History Manager
@@ -122,13 +121,9 @@ Copy code
 1️⃣ User Interface Response
 User Question
 
-csharp
-Copy code
 What is the weight of RAG integration?
 Assistant Response
 
-css
-Copy code
 The RAG integration and functionality carries a weight of 40%.
 Metrics
 
@@ -141,8 +136,7 @@ Mini RAG Assistant (1).docx
 "RAG Integration and Functionality... 40%"
 
 2️⃣ Terminal Logs
-plaintext
-Copy code
+
 INFO: Started Streamlit App
 ✅ Database loaded successfully
 📂 Ingestion: Processing 'Mini RAG Assistant (1).docx'
