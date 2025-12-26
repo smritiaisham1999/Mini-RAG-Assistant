@@ -70,7 +70,7 @@ This ensures contextual continuity across long documents.
 
 ### 📥 1. Clone & Install Dependencies
 
-```bash
+bash
 git clone https://github.com/smritiaisham1999/Mini-RAG-Assistant.git
 cd Mini-RAG-Assistant
 pip install -r requirements.txt
@@ -86,14 +86,10 @@ Copy code
 OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
 GOOGLE_API_KEY=AIzaxxxxxxxxxxxx
 🏃‍♂️ 3. Run the Application
-bash
-Copy code
 streamlit run app.py
 The app will be available at:
+https://mini-rag-assistant.streamlit.app/
 
-arduino
-Copy code
-http://localhost:8501
 📂 Supported Data Sources
 The system uses LangChain document loaders to support:
 
